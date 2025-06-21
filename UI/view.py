@@ -5,6 +5,9 @@ class View(ft.UserControl):
     def __init__(self, page: ft.Page):
         super().__init__()
         # page stuff
+        self._txtInSoglia = None
+        self.ddAlbum = None
+        self.ddAlbumValue = None
         self._page = page
         self._page.title = "TdP - Esame del 14/09/2022"
         self._page.horizontal_alignment = 'CENTER'
@@ -34,12 +37,12 @@ class View(ft.UserControl):
         self._page.controls.append(row1)
 
         #ROW2
-        self._ddAlbum = ft.Dropdown(label="Album", on_change=self._controller.getSelectedAlbum)
+        self.ddAlbum = ft.Dropdown(label="Album",  on_change = self.on_ddAlbum_change)
         self._btnAnalisiComp = ft.ElevatedButton(text = "Analisi Componente.",
                                                  on_click=self._controller.handleAnalisiComp)
 
         row2 = ft.Row([
-            ft.Container(self._ddAlbum, width=300),
+            ft.Container(self.ddAlbum, width=300),
             ft.Container(self._btnAnalisiComp, width=300)
         ], alignment=ft.MainAxisAlignment.CENTER)
         self._page.controls.append(row2)
@@ -75,6 +78,15 @@ class View(ft.UserControl):
         self._page.dialog = dlg
         dlg.open = True
         self._page.update()
+
+    def on_ddAlbum_change(self, e):
+        self.ddAlbumValue = self.ddAlbum.value
+        self.update_page()
+
+    def reset_dropdown_album(self):
+        self.ddAlbum.value = None
+        self.ddAlbum.options = []
+        self.update_page()
 
     def update_page(self):
         self._page.update()
